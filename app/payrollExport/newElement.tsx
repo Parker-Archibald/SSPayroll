@@ -2,12 +2,19 @@
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/16/solid"
 import Inputs from "./inputs"
 import ElementSelect from "./elementSelect"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import CurrentHeaders from "./currentHeadersFlyout"
+
+type Headers = {
+  elType: string; 
+  name: string; 
+  id: number
+}
 
 type Props = {
   isOpen: () => void;
-  callBack: (data: {headerName: string,
+  callBack: (data: {
+    headerName: string,
     selectedElementType: string,
     parameters: string,
     headerId: string,
@@ -16,23 +23,22 @@ type Props = {
     valHourly: number,
     valSalary: number,
     reqZero: number}) => void;
-  allHeaders: [];
-  id: number | null;
+    allHeaders: Headers[];
+    id: number;
 }
 
 export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
 
-    const [headerName, setHeaderName] = useState<string>('')
     const [selectedElementType, setSelectedElementType] = useState<string>('')
     const [parameters, setParameters] = useState<string>('')
     const [paramList, setParamList] = useState<string[]>([])
     const [selectedHeader, setSelectedHeader] = useState<string>('')
     const [elRow, setElRow] = useState(`${id}02`)
     const [example, setExample] = useState('')
-    const [headerId, setHeaderId] = useState('')
-    const [valHourly, setValHourly] = useState(1)
-    const [valSalary, setValSalary] = useState(1)
-    const [reqZero, setReqZero] = useState(0)
+    const [headerId, setHeaderId] = useState<number | null>(null)
+    const [valHourly, setValHourly] = useState<number>(1)
+    const [valSalary, setValSalary] = useState<number>(1)
+    const [reqZero, setReqZero] = useState<number>(0)
 
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-10 flex items-center justify-center">
@@ -54,8 +60,7 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
                 {/* <Inputs label={'Header Name'} callBack={(name: string) => setHeaderName(name)}/> */}
                 <div className="space-y-2">
                     <p>Header</p>
-                    {/* <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p: any) => setParamList(p)}/> */}
-                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} allHeaders={allHeaders} getHeaderId={(headerId: string) => setHeaderId(headerId)}/>
+                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} allHeaders={allHeaders} getHeaderId={(headerId: number) => setHeaderId(headerId)}/>
                 </div>
                 <div>
                     <p>Element Type</p>
@@ -64,24 +69,24 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
                 <div>
                     <Inputs label="Payroll_element_row_id" value={elRow} callBack={(data: string) => setElRow(data)}/>
                 </div>
-                {headerId !== '' && (
+                {headerId !== null && (
                   <div>
-                      <Inputs label="Parent_element_id" value={`${headerId}`} callBack={(data: string) => setHeaderId(data)}/>
+                      <Inputs label="Parent_element_id" value={`${headerId}`} callBack={(data: string) => setHeaderId(parseInt(data))}/>
                   </div>
                 )}
                 {/* Valids and non zero */}
                 <div className="flex gap-x-8">
                   <div className="flex flex-col gap-y-2">
                       <label htmlFor="valHourlyInput">Valid Hourly</label>
-                      <input id='valHourlyInput' type='number' defaultValue={1} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e: any) => setValHourly(e.target.value)}/>
+                      <input id='valHourlyInput' type='number' defaultValue={1} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e) => setValHourly(parseInt(e.target.value))}/>
                   </div>  
                   <div className="flex flex-col gap-y-2">
                       <label htmlFor="valHourlyInput">Valid Salary</label>
-                      <input id='valHourlyInput' type='number' defaultValue={1} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e: any) => setValSalary(e.target.value)}/>
+                      <input id='valHourlyInput' type='number' defaultValue={1} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e) => setValSalary(parseInt(e.target.value))}/>
                   </div> 
                   <div className="flex flex-col gap-y-2">
                       <label htmlFor="valHourlyInput">Non-zero</label>
-                      <input id='valHourlyInput' type='number' defaultValue={0} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e: any) => setReqZero(e.target.value)}/>
+                      <input id='valHourlyInput' type='number' defaultValue={0} className="border rounded-md py-1 px-2 w-full focus:outline-none focus:ring-1 focus:ring-orange-400" onChange={(e) => setReqZero(parseInt(e.target.value))}/>
                   </div> 
                 </div>
                 <div className="flex flex-col gap-y-2 w-full">

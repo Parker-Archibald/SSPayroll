@@ -91,7 +91,7 @@ export default function ElementSelect({callBack, getParams, getExample}: Props) 
         setFilteredChecks(checks.sort())
     }
     else {
-        let newArr: { id: number; name: string; paramList: string[]; example: string; }[] = []
+        const newArr: { id: number; name: string; paramList: string[]; example: string; }[] = []
 
         checks.filter((check) => {
             if(check.name.toLowerCase().includes(filter.toLowerCase())) {

@@ -4,8 +4,8 @@ import NewHeader from "./newHeader"
 import NewElement from "./newElement"
 
   interface Props {
-    id: number | null;
-    headerCallback: Function;
+    id: number;
+    headerCallback: (data: ReturnHeader[]) => void;
     elementCallback: (data: Element[]) => void;
   }
 
@@ -41,11 +41,24 @@ import NewElement from "./newElement"
     parameters: string; 
     example: string;
   }
+
+  type ReturnHeader = {
+    id: number;
+    payroll_mapping_id: number;
+    elNum: number;
+    elType: string;
+    name: string;
+    params: string;
+    valHourly: number;
+    valSalary: number;
+    reqZero: number;
+    example: string;
+  }
   
   export default function PayrollPreview({id, headerCallback, elementCallback}: Props) {
 
     const [newHeaderOpen, setNewHeaderOpen] = useState<boolean>(false)
-    const [headers, setHeaders] = useState<[]>([])
+    const [headers, setHeaders] = useState<ReturnHeader[]>([])
     const [newElementOpen, setNewElementOpen] = useState<boolean>(false)
     const [allElements, setAllElements] = useState<Element[]>([])
     const [row2, setRow2] = useState<Element[] | []>([])
@@ -58,20 +71,20 @@ import NewElement from "./newElement"
       parameters: string;
       example: string;
     }) => {
-      let newHeaders = headers;
+      const newHeaders: ReturnHeader[] = headers;
       let finalId;
-      let headerLen = headers.length
-      let elLen = allElements.length
-      let finalLen = headerLen + elLen + 1
+      const headerLen = headers.length
+      const elLen = allElements.length
+      const finalLen = headerLen + elLen + 1
 
       if(headers.length < 10) {
-        finalId = `${id}0${finalLen}`
+        finalId = parseInt(`${id}0${finalLen}`)
       }
       else {
-        finalId = `${id}${finalLen}`
+        finalId = parseInt(`${id}${finalLen}`)
       }
 
-      let tempData = {
+      const tempData: ReturnHeader = {
         id: finalId,
         payroll_mapping_id: id,
         elNum: headers.length + 1,
@@ -92,7 +105,7 @@ import NewElement from "./newElement"
     }
 
     const addNewElement = async (data: El) => {
-      let newList: Element[] = allElements;
+      const newList: Element[] = allElements;
 
       let headerLen = headers.length;
       let elLen = allElements.length;
@@ -125,11 +138,11 @@ import NewElement from "./newElement"
 
       await elementCallback(newList)
 
-      let two: Element[] = [];
-      let three: Element[] = []
+      const two: Element[] = [];
+      const three: Element[] = []
       newList.forEach((el: Element) => {
-        let str: string = el.elRow;
-        let newStr = str[el.elRow.length - 1]
+        const str: string = el.elRow;
+        const newStr = str[el.elRow.length - 1]
 
         if(newStr === '2') {
           two.push(el)
@@ -175,7 +188,7 @@ import NewElement from "./newElement"
                 </thead>
                 <tbody className="bg-white">
                 <tr className="even:bg-gray-50">
-                  {headers.map((header: Header, index: number) => (
+                  {headers.map((header: ReturnHeader, index: number) => (
                       <td key={header.example + index}  className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
                         {header.example}
                       </td>
