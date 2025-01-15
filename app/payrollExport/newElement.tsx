@@ -60,7 +60,7 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
                 {/* <Inputs label={'Header Name'} callBack={(name: string) => setHeaderName(name)}/> */}
                 <div className="space-y-2">
                     <p>Header</p>
-                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} allHeaders={allHeaders} getHeaderId={(headerId: number) => setHeaderId(headerId)}/>
+                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} allHeaders={allHeaders} getHeaderId={(headerId: number | null) => setHeaderId(headerId)}/>
                 </div>
                 <div>
                     <p>Element Type</p>
