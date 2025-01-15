@@ -2,7 +2,7 @@
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/16/solid"
 import Inputs from "./inputs"
 import ElementSelect from "./elementSelect"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type Props = {
   isOpen: () => void;
@@ -16,7 +16,13 @@ export default function NewHeader({isOpen, callBack}: Props) {
     const [parameters, setParameters] = useState<string>('')
     const [paramList, setParamList] = useState<string[]>([])
     const [example, setExample] = useState<string>('')
+    const [tempParams, setTempParams] = useState<string>('')
 
+    useEffect(() => {
+      const paramStr = paramList.join('')
+
+      setTempParams(paramStr)
+    }, [paramList])
 
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-10 flex items-center justify-center">
@@ -42,7 +48,7 @@ export default function NewHeader({isOpen, callBack}: Props) {
                             <ArrowTopRightOnSquareIcon className="size-4 hover:cursor-pointer"/>
                         </a>
                     </div>
-                    <input id='parameterInput' className="rounded-md px-2 py-1 border focus:outline-none focus:ring-1 focus:ring-orange-500" title={paramList} onChange={(e) => setParameters(e.target.value)}/>
+                    <input id='parameterInput' className="rounded-md px-2 py-1 border focus:outline-none focus:ring-1 focus:ring-orange-500" title={tempParams} onChange={(e) => setParameters(e.target.value)}/>
                 </div>
                 <div className="w-full flex justify-center">
                   <button type='submit' className="bg-orange-400 w-fit px-8 py-1 rounded-md hover:bg-orange-600 transition-all duration-200 ease-in-out text-gray-100">Save</button>
