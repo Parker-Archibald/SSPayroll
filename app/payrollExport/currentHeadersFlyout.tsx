@@ -10,9 +10,9 @@ import { useState } from 'react'
 // ]
 
 interface Props {
-    callBack: Function;
+    callBack: any;
     allHeaders: [];
-    getHeaderId: Function;
+    getHeaderId: any;
 }
 
 export default function CurrentHeaders({callBack, allHeaders, getHeaderId}: Props) {
