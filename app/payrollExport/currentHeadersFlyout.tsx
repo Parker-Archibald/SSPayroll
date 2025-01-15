@@ -12,13 +12,13 @@ import { useState } from 'react'
 type Headers = {
   elType: string; 
   name: string; 
-  id: number
+  id: number | null
 }
 
 interface Props {
     callBack: (el: string) => void;
     allHeaders: Headers[];
-    getHeaderId: (headerId: number) => void;
+    getHeaderId: (headerId: number | null) => void;
 }
 
 export default function CurrentHeaders({callBack, allHeaders, getHeaderId}: Props) {

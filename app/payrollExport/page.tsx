@@ -6,8 +6,8 @@ import { ChevronDownIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/
 import PayrollPreview from "./payrollPreview";
 
 type Header = {
-    id: string;
-    payroll_mapping_id: number;
+    id: number | null;
+    payroll_mapping_id: number | null;
     elNum: number;
     elType: string;
     name: string;
@@ -16,24 +16,6 @@ type Header = {
     valSalary: number;
     reqZero: number;
     example: string;
-}
-
-type Element = {
-    elType: string;
-    headerName: string;
-    selectedElementType: string;
-    parameters: string;
-    headerId: string;
-    elRow: number;
-    example: string;
-    valHourly: number;
-    valSalary: number;
-    reqZero: number;
-    headername: string;
-    elNum: string;
-    headerid: string;
-    pMapId: number | null;
-    id: string
 }
 
 type El = {
@@ -57,20 +39,18 @@ const PayrollExport = () => {
     const [isMultiLine, setIsMultiLine] = useState<boolean>(true)
     const [queryIsOpen, setQueryIsOpen] = useState<boolean>(false)
     const [numberOfRows, setNumberOfRows] = useState<number>(0)
-    const [rowData, setRowData] = useState([])
+    const [rowData, setRowData] = useState<string[]>([])
     const [allElements, setAllElements] = useState<El[] | []>([])
     const [allHeaders, setAllHeaders] = useState<Header[] | []>([])
     const [hasNewData, setHasNewData] = useState<boolean>(false)
 
-    const [columnOpen, setColumnOpen] = useState(false)
-
     useEffect(() => {
         if(numberOfRows > 0) {
-            let ar: any = Array.from(Array(numberOfRows).keys())
-        
-            ar.forEach((num: number) => {
-                ar[num] = `(${id}0${num + 1}, ${id}, ${num + 1}, 1, 1)`
-            })
+            const ar: string[] = []
+
+            for (let i = 0; i < numberOfRows; i++) {
+                ar.push(`(${id}0${i + 1}, ${id}, ${i + 1}, 1, 1)`)
+            }
 
             setRowData(ar)
         }

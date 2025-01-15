@@ -2,13 +2,13 @@
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/16/solid"
 import Inputs from "./inputs"
 import ElementSelect from "./elementSelect"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CurrentHeaders from "./currentHeadersFlyout"
 
 type Headers = {
   elType: string; 
   name: string; 
-  id: number
+  id: number | null;
 }
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
     valSalary: number,
     reqZero: number}) => void;
     allHeaders: Headers[];
-    id: number;
+    id: number | null;
 }
 
 export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {

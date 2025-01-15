@@ -1,10 +1,10 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import NewHeader from "./newHeader"
 import NewElement from "./newElement"
 
   interface Props {
-    id: number;
+    id: number | null;
     headerCallback: (data: ReturnHeader[]) => void;
     elementCallback: (data: Element[]) => void;
   }
@@ -43,8 +43,8 @@ import NewElement from "./newElement"
   }
 
   type ReturnHeader = {
-    id: number;
-    payroll_mapping_id: number;
+    id: number | null;
+    payroll_mapping_id: number | null;
     elNum: number;
     elType: string;
     name: string;

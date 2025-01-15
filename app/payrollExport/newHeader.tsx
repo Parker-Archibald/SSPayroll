@@ -33,7 +33,7 @@ export default function NewHeader({isOpen, callBack}: Props) {
                 <Inputs label={'Header Name'} callBack={(name: string) => setHeaderName(name)}/>
                 <div>
                     <p>Element Type</p>
-                    <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p: any) => setParamList(p)} getExample={(ex: any) => setExample(ex)}/>
+                    <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p) => setParamList(p)} getExample={(ex: string) => setExample(ex)}/>
                 </div>
                 <div className="flex flex-col gap-y-2 w-full">
                     <div className="flex gap-x-2 items-center">
