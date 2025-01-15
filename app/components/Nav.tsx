@@ -10,9 +10,12 @@ const Nav = () => {
 
     useEffect(() => {
             const path = pathName.split('/')[1]
-            path === 'payrollExport' ? setRoute('Payroll Export') : setRoute(undefined)
-
-        
+            if(path === 'payrollExport') {
+                setRoute('Payroll Export') 
+            }
+            else {
+                setRoute(undefined)
+            }
     }, [pathName])
 
     return (

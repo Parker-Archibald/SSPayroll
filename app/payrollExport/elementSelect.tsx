@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/16/solid'
 import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
@@ -69,10 +69,16 @@ const checks = [
     {id: 59, name: 'Last_Name', paramList: ['NA'], example: 'Marley'}
 ]
 
-export default function ElementSelect({callBack, getParams, getExample}: any) {
+interface Props {
+  callBack: Function;
+  getParams: Function;
+  getExample: Function;
+}
+
+export default function ElementSelect({callBack, getParams, getExample}: Props) {
 
   const [selected, setSelected] = useState(checks[0])
-  const [filteredChecks, setFilteredChecks] = useState<any>(checks)
+  const [filteredChecks, setFilteredChecks] = useState(checks)
   const [filter, setFilter] = useState<string>('')
 
   useEffect(() => {
@@ -82,7 +88,9 @@ export default function ElementSelect({callBack, getParams, getExample}: any) {
     else {
         let newArr: any = []
 
-        checks.filter((check: any) => {
+        checks.filter((check: {
+          name: string;
+        }) => {
             if(check.name.toLowerCase().includes(filter.toLowerCase())) {
                 newArr.push(check)
             }
