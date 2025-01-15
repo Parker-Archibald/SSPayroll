@@ -7,7 +7,12 @@ import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 
 
-const checks = [
+const checks: {
+  id: number;
+  name: string;
+  paramList: string[];
+  example: string;
+}[] = [
     {id: 1, name: 'Hours_worked', paramList: ['columns=1', 'type=Regular', 'decimalPlaces=5'], example: '2.00'},
     {id: 2, name: 'Hours_worked_excluding_company_holidays', paramList: ['NA'], example: '2.00'},
     {id: 3, name: 'Sick_hours', paramList: ['NA'], example: '2.00'},
@@ -70,9 +75,9 @@ const checks = [
 ]
 
 interface Props {
-  callBack: Function;
-  getParams: Function;
-  getExample: Function;
+  callBack: (p: string) => void;
+  getParams: () => void;
+  getExample: () => void;
 }
 
 export default function ElementSelect({callBack, getParams, getExample}: Props) {
@@ -86,14 +91,12 @@ export default function ElementSelect({callBack, getParams, getExample}: Props) 
         setFilteredChecks(checks.sort())
     }
     else {
-        let newArr: any = []
+        let newArr: { id: number; name: string; paramList: string[]; example: string; }[] = []
 
-        checks.filter((check: {
-          name: string;
-        }) => {
+        checks.filter((check) => {
             if(check.name.toLowerCase().includes(filter.toLowerCase())) {
-                newArr.push(check)
-            }
+                    newArr.push(check)
+                }
         })
 
         setFilteredChecks(newArr.sort())
@@ -121,7 +124,7 @@ export default function ElementSelect({callBack, getParams, getExample}: Props) 
                 <input className='w-full py-2 focus:outline-none' placeholder='Search' onChange={(e) => setFilter(e.target.value)}/>
             </div>
 
-          {filteredChecks.map((check: {id: number, name: string, paramList: [], example: string}) => (
+          {filteredChecks.map((check) => (
             <ListboxOption
             key={check.id}
             value={check}
