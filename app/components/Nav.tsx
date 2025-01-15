@@ -6,7 +6,7 @@ const Nav = () => {
 
     const router = useRouter();
     const pathName = usePathname()
-    const [route, setRoute] = useState<any>(undefined);
+    const [route, setRoute] = useState<string | undefined>(undefined);
 
     useEffect(() => {
             const path = pathName.split('/')[1]

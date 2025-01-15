@@ -15,7 +15,7 @@ type Props = {
     getHeaderId: Function;
 }
 
-export default function CurrentHeaders({callBack, allHeaders, getHeaderId}: any) {
+export default function CurrentHeaders({callBack, allHeaders, getHeaderId}: Props) {
 
     const [level, setLevel] = useState<string>('Select Header')
 
