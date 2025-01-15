@@ -1,0 +1,176 @@
+'use client'
+import { useEffect, useState } from "react"
+import NewHeader from "./newHeader"
+import NewElement from "./newElement"
+
+  type Props = {
+    id: number | null;
+    headerCallback: Function;
+    elementCallback: Function;
+  }
+  
+  export default function PayrollPreview({id, headerCallback, elementCallback}: Props) {
+
+    const [newHeaderOpen, setNewHeaderOpen] = useState<boolean>(false)
+    const [headers, setHeaders] = useState<any>([])
+    const [newElementOpen, setNewElementOpen] = useState<boolean>(false)
+    const [allElements, setAllElements] = useState([])
+    const [row2, setRow2] = useState<any>([])
+    const [row3, setRow3] = useState<any>([])
+
+
+    const addNewHeader = async (data: {
+      selectedElementType: string;
+      headerName: string;
+      parameters: string;
+      example: string;
+    }) => {
+      let newHeaders = headers;
+      let finalId;
+      let headerLen = headers.length
+      let elLen = allElements.length
+      let finalLen = headerLen + elLen + 1
+
+      if(headers.length < 10) {
+        finalId = `${id}0${finalLen}`
+      }
+      else {
+        finalId = `${id}${finalLen}`
+      }
+
+      let tempData = {
+        id: finalId,
+        payroll_mapping_id: id,
+        elNum: headers.length + 1,
+        elType: data.selectedElementType,
+        name: data.headerName,
+        params: data.parameters,
+        valHourly: 1,
+        valSalary: 1,
+        reqZero: 0,
+        example: data.example
+      }
+
+      newHeaders.push(tempData)
+
+      setHeaders(newHeaders)
+
+      await headerCallback(newHeaders)
+    }
+
+    const addNewElement = async (data: any) => {
+      let newList: any = allElements;
+
+      let headerLen = headers.length;
+      let elLen = allElements.length;
+      let finalLen = headerLen + elLen + 1;
+      let finalId;
+
+      if(finalLen > 10) {
+        finalId = `${id}${finalLen}`
+      }
+      else {
+        finalId = `${id}0${finalLen}`
+      }
+
+      const finalData = {
+        id: finalId,
+        pMapId: id,
+        elRow: data.elRow,
+        headerid: data.headerId,
+        elNum: 0,
+        elType: data.selectedElementType,
+        headername: data.headerName,
+        parameters: data.parameters,
+        valHourly: data.valHourly,
+        valSalary: data.valSalary,
+        reqZero: data.reqZero
+      }
+
+      newList.push(finalData)
+      setAllElements(newList)
+
+      await elementCallback(newList)
+
+      let two: any = [];
+      let three: any = []
+      allElements.forEach((el: any) => {
+        let str = el.elRow;
+        let newStr = str[el.elRow.length - 1]
+
+        if(newStr === '2' || newStr === 2) {
+          two.push(el)
+        }
+        else {
+          three.push(el)
+        }
+      })
+
+      setRow2(two)
+      setRow3(three)
+    }
+
+    return (
+      <div className="px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flow-root">
+          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="flex">
+              <div>
+                <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3" onClick={() => setNewHeaderOpen(true)}><span className="bg-orange-400 ml-5 text-white hover:bg-gray-300 px-3 py-2 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer">New Header</span></div>
+                {newHeaderOpen && <NewHeader isOpen={() => setNewHeaderOpen(false)} callBack={(data: any) => addNewHeader(data)}/>}
+              </div>
+              <div>
+                <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3" onClick={() => setNewElementOpen(true)}><span className="bg-orange-400 ml-5 text-white hover:bg-gray-300 px-3 py-2 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer">New Element</span></div>
+                {newElementOpen && <NewElement isOpen={() => setNewElementOpen(false)} callBack={(data: any) => addNewElement(data)} allHeaders={headers} id={id}/>}
+              </div>
+            </div>
+            
+            <div className=" min-w-full py-2 align-middle sm:px-6 lg:px-8 flex">
+              <table className="min-w-full divide-y divide-gray-300 bg-white">
+                <thead>
+                  <tr>
+                    {headers.map((header: {
+                      name: string;
+                    }) => (
+                        <th key={header.name} scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">
+                            {header.name}
+                        </th>
+                    ))}
+                    
+                  </tr>
+                  
+                </thead>
+                <tbody className="bg-white">
+                <tr className="even:bg-gray-50">
+                  {headers.map((header: any, index: number) => (
+                      <td key={header.example + index}  className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                        {header.example}
+                      </td>
+                  ))}
+                  </tr>
+                  <tr className="even:bg-gray-50" >
+                    {row2.map((element: any, index: number) => (
+                    
+                      <td key={element.id + index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                        {element.elType}
+                      </td>
+                      
+                    ))}
+                  </tr>
+                  <tr className="even:bg-gray-50" >
+                    {row3.map((element: any, index: number) => (
+                    
+                      <td key={element.id + index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                        {element.elType}
+                      </td>
+                      
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
