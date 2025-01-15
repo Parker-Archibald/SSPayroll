@@ -43,6 +43,8 @@ const PayrollExport = () => {
     const [allElements, setAllElements] = useState<El[] | []>([])
     const [allHeaders, setAllHeaders] = useState<Header[] | []>([])
     const [hasNewData, setHasNewData] = useState<boolean>(false)
+    
+    console.log(isMultiLine)
 
     useEffect(() => {
         if(numberOfRows > 0) {
@@ -76,7 +78,7 @@ const PayrollExport = () => {
         }
     }
 
-    const updateHeaders = (data: {}[]) => {
+    const updateHeaders = (data: Header[]) => {
         setAllHeaders(data)
         setHasNewData(true)
     }
@@ -141,7 +143,12 @@ ${payrollElementRow.join('')} ${headers.join('')} ${elements.join('')}`
                 <div className="flex flex-col gap-y-2 w-fit text-gray-800">
                     <label htmlFor='exportIdInput' className="text-sm ">How many lines are needed in payroll_element_row?</label>
                     <input type='number' className="p-2 focus:outline-none rounded-md focus:ring-1 focus:ring-blue-400" placeholder={'1'} onChange={(e) => {
-                        e.target.value === '' ? setNumberOfRows(1) : setNumberOfRows(parseInt(e.target.value))
+                        if(e.target.value === '') {
+                            setNumberOfRows(1)
+                        }
+                        else {
+                            setNumberOfRows(parseInt(e.target.value))
+                        }
                     }}/>
                 </div>
             </div>

@@ -107,9 +107,9 @@ import NewElement from "./newElement"
     const addNewElement = async (data: El) => {
       const newList: Element[] = allElements;
 
-      let headerLen = headers.length;
-      let elLen = allElements.length;
-      let finalLen = headerLen + elLen + 1;
+      const headerLen = headers.length;
+      const elLen = allElements.length;
+      const finalLen = headerLen + elLen + 1;
       let finalId;
 
       if(finalLen > 10) {
