@@ -5,15 +5,15 @@ import MultilineFlyout from "./multilineFlyout";
 import { ChevronDownIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import PayrollPreview from "./payrollPreview";
 
-type newEl = {
-    elName: string;
-    elType: string;
-    elNum: number;
-    valHourly: number;
-    valSalary: number;
-    elRow: number;
-    params: string;
-}
+// interface newEl {
+//     elName: string;
+//     elType: string;
+//     elNum: number;
+//     valHourly: number;
+//     valSalary: number;
+//     elRow: number;
+//     params: string;
+// }
 
 const PayrollExport = () => {
 

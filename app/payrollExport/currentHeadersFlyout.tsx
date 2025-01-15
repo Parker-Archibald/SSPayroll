@@ -9,7 +9,7 @@ import { useState } from 'react'
 //   { name: 'Company', href: '#' },
 // ]
 
-type Props = {
+interface Props {
     callBack: Function;
     allHeaders: [];
     getHeaderId: Function;

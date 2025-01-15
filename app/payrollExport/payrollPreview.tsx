@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import NewHeader from "./newHeader"
 import NewElement from "./newElement"
 
-  type Props = {
+  interface Props {
     id: number | null;
     headerCallback: Function;
     elementCallback: Function;
