@@ -5,8 +5,8 @@ import ElementSelect from "./elementSelect"
 import { useState } from "react"
 
 type Props = {
-  isOpen: Function;
-  callBack: Function
+  isOpen: () => void;
+  callBack: (data: {selectedElementType: string; headerName: string; parameters: string; example: string;}) => void
 }
 
 export default function NewHeader({isOpen, callBack}: Props) {
@@ -14,7 +14,7 @@ export default function NewHeader({isOpen, callBack}: Props) {
     const [headerName, setHeaderName] = useState<string>('')
     const [selectedElementType, setSelectedElementType] = useState<string>('')
     const [parameters, setParameters] = useState<string>('')
-    const [paramList, setParamList] = useState<any>([])
+    const [paramList, setParamList] = useState<string[]>([])
     const [example, setExample] = useState<string>('')
 
 
@@ -24,7 +24,7 @@ export default function NewHeader({isOpen, callBack}: Props) {
         <div className="bg-white w-1/4 h-fit z-20 rounded-md p-8 relative">
             <div className="absolute right-1 top-1 p-1 hover:bg-gray-100 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer" onClick={isOpen}><XMarkIcon className="size-6"/></div>
             <h3 className="text-xl font-semibold">New Header</h3>
-            <form className="py-4 flex flex-col gap-y-4" onSubmit={(e: any) => {callBack({
+            <form className="py-4 flex flex-col gap-y-4" onSubmit={(e) => {callBack({
               headerName: headerName,
               selectedElementType: selectedElementType,
               parameters: parameters,

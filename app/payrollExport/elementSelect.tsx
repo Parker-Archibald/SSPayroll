@@ -47,13 +47,13 @@ const checks: {
     {id: 32, name: 'DEPARTMENT', paramList: ['NA'], example: 'FOH'},
     {id: 33, name: 'PAYMENT_SALES', paramList: ['NA'], example: '200.00'},
     {id: 34, name: 'PAYMENT_TIPS', paramList: ['NA'], example: '2.00'},
-    {id: 35, name: 'PAYMENT_SERVICE_CHARGE', paramList: ['NA']},
+    {id: 35, name: 'PAYMENT_SERVICE_CHARGE', paramList: ['NA'], example: 'NA'},
     {id: 36, name: 'TIP_INFO_SALES', paramList: ['NA'], example: '2.00'},
     {id: 37, name: 'CHARGED_TIPS', paramList: ['deductTipSharePaid=false'], example: '2.00'},
     {id: 38, name: 'CASH_TIPS', paramList: ['includeTipShareEarned=false'], example: '2.00'},
     {id: 39, name: 'SHIFT_TIPS', paramList: ['includeServiceCharge=true', 'nonCashOnly=true','code=CashTips','isAmount=true','includeDeclared=true'], example: '2.00'},
-    {id: 40, name: 'BASIC', paramList: ['NA']},
-    {id: 41, name: 'SUNDAY', paramList: ['NA']},
+    {id: 40, name: 'BASIC', paramList: ['NA'], example: 'NA'},
+    {id: 41, name: 'SUNDAY', paramList: ['NA'], example: 'NA'},
     {id: 42, name: 'NOTES', paramList: ['NA'], example: 'This is a note'},
     {id: 43, name: 'FIXED_TEXT', paramList: ['text=doubletime', 'was=SHIFT_BONUS', 'category=MILEAGE', 'text=0.00'], example: 'doubletime'},
     {id: 44, name: 'WEEK_NUMBER', paramList: ['NA'], example: '1'},
@@ -76,8 +76,8 @@ const checks: {
 
 interface Props {
   callBack: (p: string) => void;
-  getParams: () => void;
-  getExample: () => void;
+  getParams: (p: string[]) => void;
+  getExample: (d: string) => void;
 }
 
 export default function ElementSelect({callBack, getParams, getExample}: Props) {

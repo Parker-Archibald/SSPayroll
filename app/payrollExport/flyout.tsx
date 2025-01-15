@@ -9,7 +9,11 @@ const solutions = [
   { name: 'Company', href: '#' },
 ]
 
-export default function Flyout({callBack}: any) {
+interface Props {
+  callBack: (lev: string) => void
+}
+
+export default function Flyout({callBack}: Props) {
 
     const [level, setLevel] = useState<string>('Corporate')
 

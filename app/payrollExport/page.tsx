@@ -15,6 +15,50 @@ import PayrollPreview from "./payrollPreview";
 //     params: string;
 // }
 
+type Header = {
+    id: string;
+    payroll_mapping_id: number;
+    elNum: number;
+    elType: string;
+    name: string;
+    params: string;
+    valHourly: number;
+    valSalary: number;
+    reqZero: number;
+}
+
+type Element = {
+    elType: string;
+    headerName: string;
+    selectedElementType: string;
+    parameters: string;
+    headerId: string;
+    elRow: number;
+    example: string;
+    valHourly: number;
+    valSalary: number;
+    reqZero: number;
+    headername: string;
+    elNum: string;
+    headerid: string;
+    pMapId: number | null;
+    id: string
+}
+
+type El = {
+    headerName: string,
+    parameters: string,
+    headerId: string,
+    elRow: string,
+    valHourly: number,
+    valSalary: number,
+    reqZero: number,
+    id: string;
+    pMapId: number | null;
+    elNum: number | string;
+    elType: string;
+}
+
 const PayrollExport = () => {
 
     const [level, setLevel] = useState<string>('Corporate')
@@ -23,8 +67,8 @@ const PayrollExport = () => {
     const [queryIsOpen, setQueryIsOpen] = useState<boolean>(false)
     const [numberOfRows, setNumberOfRows] = useState<number>(0)
     const [rowData, setRowData] = useState([])
-    const [allElements, setAllElements] = useState<any>([])
-    const [allHeaders, setAllHeaders] = useState<any>([])
+    const [allElements, setAllElements] = useState<El[] | []>([])
+    const [allHeaders, setAllHeaders] = useState<Header[] | []>([])
     const [hasNewData, setHasNewData] = useState<boolean>(false)
 
     const [columnOpen, setColumnOpen] = useState(false)
@@ -61,32 +105,32 @@ const PayrollExport = () => {
         }
     }
 
-    const updateHeaders = (data: []) => {
+    const updateHeaders = (data: {}[]) => {
         setAllHeaders(data)
         setHasNewData(true)
     }
 
-    const updateElements = ((data: any) => {
+    const updateElements = ((data: El[]) => {
         setAllElements(data)
         setHasNewData(true)
     })  
 
     const copyToClipboard = () => {
-        let payrollElementRow: any = []
-        let headers: any = [];
-        let elements: any = [];
+        let payrollElementRow: string[] = []
+        let headers: string[] = [];
+        let elements: string[] = [];
 
         rowData.forEach(row => {
             payrollElementRow.push(`INSERT INTO payroll_element_row (ID, Payroll_Mapping_ID, Row_Order, Valid_Hourly, Valid_Salaried) VALUES ${row};
 `)
         })
 
-        allHeaders.map((header: any) => {
+        allHeaders.map((header: Header) => {
             headers.push(`INSERT INTO payroll_element (ID, payroll_mapping_id, Element_Number, Payroll_Element, Column_Title, Parameters, Valid_Hourly, Valid_Salaried, Requires_Non_Zero) Values (${header.id}, ${header.payroll_mapping_id}, ${header.elNum}, '${header.elType}', '${header.name}', ${header.params ? `'${header.params}'` : null}, ${header.valHourly}, ${header.valSalary}, ${header.reqZero});
 `)
         })
 
-        allElements.map((element: any) => {
+        allElements.map((element: Element) => {
             elements.push(`INSERT INTO payroll_element (ID, Payroll_mapping_id, Payroll_element_row_id, Parent_element_id, element_number, Payroll_element, Column_title, Parameters, Valid_hourly, Valid_salaried, Requires_non_zero) VALUES (${element.id}, ${element.pMapId}, ${element.elRow}, ${element.headerid}, ${element.elNum}, '${element.elType}', '${element.headername}', ${element.parameters !== '' && element.parameters !== undefined ? `'${element.parameters}'` : null}, ${element.valHourly}, ${element.valSalary}, ${element.reqZero});
 `)
         })
@@ -125,7 +169,7 @@ ${payrollElementRow.join('')} ${headers.join('')} ${elements.join('')}`
                 {/* Lines in payroll_element_row */}
                 <div className="flex flex-col gap-y-2 w-fit text-gray-800">
                     <label htmlFor='exportIdInput' className="text-sm ">How many lines are needed in payroll_element_row?</label>
-                    <input type='number' className="p-2 focus:outline-none rounded-md focus:ring-1 focus:ring-blue-400" placeholder={'1'} onChange={(e: any) => {
+                    <input type='number' className="p-2 focus:outline-none rounded-md focus:ring-1 focus:ring-blue-400" placeholder={'1'} onChange={(e) => {
                         e.target.value === '' ? setNumberOfRows(1) : setNumberOfRows(parseInt(e.target.value))
                     }}/>
                 </div>
@@ -162,17 +206,7 @@ ${payrollElementRow.join('')} ${headers.join('')} ${elements.join('')}`
 
                     {/* Headers */}
                     <div>
-                        {allHeaders.map((header: {
-                            id: string;
-                            payroll_mapping_id: number;
-                            elNum: number;
-                            elType: string;
-                            name: string;
-                            params: string;
-                            valHourly: number;
-                            valSalary: number;
-                            reqZero: number;
-                        }) => (
+                        {allHeaders.map((header: Header) => (
                             <div key={header.name}>
                                 <span className="text-blue-600">INSERT INTO</span> payroll_element {`(ID, payroll_mapping_id, Element_Number, Payroll_Element, Column_Title, Parameters, Valid_Hourly, Valid_Salaried, Requires_Non_Zero)`}
                                 <span className="text-blue-600"> Values</span> {`(${header.id}, ${header.payroll_mapping_id}, ${header.elNum}, '${header.elType}', '${header.name}', ${header.params ? `'${header.params}'` : null}, ${header.valHourly}, ${header.valSalary}, ${header.reqZero});`}
@@ -182,14 +216,12 @@ ${payrollElementRow.join('')} ${headers.join('')} ${elements.join('')}`
 
                     {/* All Elements */}
                     <div>
-                        {allElements.map((element: any) => {
-                            
-                        return (
+                        {allElements.map((element: El) => (
                             <div key={element.elType}>
-                                <span className="text-blue-600">INSERT INTO</span> payroll_element {'(ID, Payroll_mapping_id, Payroll_element_row_id, Parent_element_id, element_number, Payroll_element, Column_title, Parameters, Valid_hourly, Valid_salaried, Requires_non_zero)'}
-                                <span className="text-blue-600"> VALUES</span> {`(${element.id}, ${element.pMapId}, ${element.elRow}, ${element.headerid}, ${element.elNum}, '${element.elType}', '${element.headername}', ${element.parameters !== '' && element.parameters !== undefined ? `'${element.parameters}'` : null}, ${element.valHourly}, ${element.valSalary}, ${element.reqZero});`}
-                            </div>
-                        )})}
+                            <span className="text-blue-600">INSERT INTO</span> payroll_element {'(ID, Payroll_mapping_id, Payroll_element_row_id, Parent_element_id, element_number, Payroll_element, Column_title, Parameters, Valid_hourly, Valid_salaried, Requires_non_zero)'}
+                            <span className="text-blue-600"> VALUES</span> {`(${element.id}, ${element.pMapId}, ${element.elRow}, ${element.headerId}, ${element.elNum}, '${element.elType}', '${element.headername}', ${element.parameters !== '' && element.parameters !== undefined ? `'${element.parameters}'` : null}, ${element.valHourly}, ${element.valSalary}, ${element.reqZero});`}
+                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -198,7 +230,7 @@ ${payrollElementRow.join('')} ${headers.join('')} ${elements.join('')}`
             <section className="w-full my-10">
                 <h3 className='text-xl font-semibold'>Preview</h3>
                 <div className="bg-gray-200 rounded-md mt-4 p-4">
-                    <PayrollPreview id={id} headerCallback={(data: any) => updateHeaders(data)} elementCallback={(data: any) => updateElements(data)}/>
+                    <PayrollPreview id={id} headerCallback={(data: {}[]) => updateHeaders(data)} elementCallback={(data: El[]) => updateElements(data)}/>
                 </div>
             </section>
 

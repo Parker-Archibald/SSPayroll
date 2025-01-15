@@ -6,8 +6,16 @@ import { useState, useEffect } from "react"
 import CurrentHeaders from "./currentHeadersFlyout"
 
 type Props = {
-  isOpen: Function;
-  callBack: Function;
+  isOpen: () => void;
+  callBack: (data: {headerName: string,
+    selectedElementType: string,
+    parameters: string,
+    headerId: string,
+    elRow: string,
+    example: string,
+    valHourly: number,
+    valSalary: number,
+    reqZero: number}) => void;
   allHeaders: [];
   id: number | null;
 }
@@ -17,7 +25,7 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
     const [headerName, setHeaderName] = useState<string>('')
     const [selectedElementType, setSelectedElementType] = useState<string>('')
     const [parameters, setParameters] = useState<string>('')
-    const [paramList, setParamList] = useState<any>([])
+    const [paramList, setParamList] = useState<string[]>([])
     const [selectedHeader, setSelectedHeader] = useState<string>('')
     const [elRow, setElRow] = useState(`${id}02`)
     const [example, setExample] = useState('')
@@ -32,7 +40,7 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
         <div className="bg-white w-1/4 h-fit z-20 rounded-md p-8 relative">
             <div className="absolute right-1 top-1 p-1 hover:bg-gray-100 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer" onClick={isOpen}><XMarkIcon className="size-6"/></div>
             <h3 className="text-xl font-semibold">New Element</h3>
-            <form className="py-4 flex flex-col gap-y-4" onSubmit={(e: any) => {callBack({
+            <form className="py-4 flex flex-col gap-y-4" onSubmit={(e) => {callBack({
               headerName: selectedHeader,
               selectedElementType: selectedElementType,
               parameters: parameters,
@@ -47,18 +55,18 @@ export default function NewElement({isOpen, callBack, allHeaders, id}: Props) {
                 <div className="space-y-2">
                     <p>Header</p>
                     {/* <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p: any) => setParamList(p)}/> */}
-                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} getParams={(p: any) => setParamList(p)} allHeaders={allHeaders} getHeaderId={(headerId: any) => setHeaderId(headerId)}/>
+                    <CurrentHeaders callBack={(el: string) => setSelectedHeader(el)} allHeaders={allHeaders} getHeaderId={(headerId: string) => setHeaderId(headerId)}/>
                 </div>
                 <div>
                     <p>Element Type</p>
-                    <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p: any) => setParamList(p)} getExample={(d: any) => setExample(d)}/>
+                    <ElementSelect callBack={(el: string) => setSelectedElementType(el)} getParams={(p: string[]) => setParamList(p)} getExample={(d: string) => setExample(d)}/>
                 </div>
                 <div>
-                    <Inputs label="Payroll_element_row_id" value={elRow} callBack={(data: any) => setElRow(data)}/>
+                    <Inputs label="Payroll_element_row_id" value={elRow} callBack={(data: string) => setElRow(data)}/>
                 </div>
                 {headerId !== '' && (
                   <div>
-                      <Inputs label="Parent_element_id" value={`${headerId}`} callBack={(data: any) => setHeaderId(data)}/>
+                      <Inputs label="Parent_element_id" value={`${headerId}`} callBack={(data: string) => setHeaderId(data)}/>
                   </div>
                 )}
                 {/* Valids and non zero */}

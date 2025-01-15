@@ -8,7 +8,11 @@ const solutions = [
   { name: false, str: 'False', href: '#' },
 ]
 
-export default function MultilineFlyout({callBack}: any) {
+type Props = {
+  callBack: (opt: boolean) => void;
+}
+
+export default function MultilineFlyout({callBack}: Props) {
 
     const [option, setOption] = useState<string>('True')
 

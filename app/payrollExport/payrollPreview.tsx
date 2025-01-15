@@ -6,17 +6,50 @@ import NewElement from "./newElement"
   interface Props {
     id: number | null;
     headerCallback: Function;
-    elementCallback: Function;
+    elementCallback: (data: Element[]) => void;
+  }
+
+  type Element = {
+    headerName: string,
+    parameters: string,
+    headerId: string,
+    elRow: string,
+    valHourly: number,
+    valSalary: number,
+    reqZero: number,
+    id: string;
+    pMapId: number | null;
+    elNum: number | string;
+    elType: string;
+  }
+
+  type El = {
+    headerName: string,
+    selectedElementType: string,
+    parameters: string,
+    headerId: string,
+    elRow: string,
+    example: string,
+    valHourly: number,
+    valSalary: number,
+    reqZero: number
+  }
+
+  type Header = {
+    selectedElementType: string; 
+    headerName: string; 
+    parameters: string; 
+    example: string;
   }
   
   export default function PayrollPreview({id, headerCallback, elementCallback}: Props) {
 
     const [newHeaderOpen, setNewHeaderOpen] = useState<boolean>(false)
-    const [headers, setHeaders] = useState<any>([])
+    const [headers, setHeaders] = useState<[]>([])
     const [newElementOpen, setNewElementOpen] = useState<boolean>(false)
-    const [allElements, setAllElements] = useState([])
-    const [row2, setRow2] = useState<any>([])
-    const [row3, setRow3] = useState<any>([])
+    const [allElements, setAllElements] = useState<Element[]>([])
+    const [row2, setRow2] = useState<Element[] | []>([])
+    const [row3, setRow3] = useState<Element[] | []>([])
 
 
     const addNewHeader = async (data: {
@@ -58,8 +91,8 @@ import NewElement from "./newElement"
       await headerCallback(newHeaders)
     }
 
-    const addNewElement = async (data: any) => {
-      let newList: any = allElements;
+    const addNewElement = async (data: El) => {
+      let newList: Element[] = allElements;
 
       let headerLen = headers.length;
       let elLen = allElements.length;
@@ -73,14 +106,14 @@ import NewElement from "./newElement"
         finalId = `${id}0${finalLen}`
       }
 
-      const finalData = {
+      const finalData: Element = {
         id: finalId,
         pMapId: id,
         elRow: data.elRow,
-        headerid: data.headerId,
+        headerId: data.headerId,
         elNum: 0,
         elType: data.selectedElementType,
-        headername: data.headerName,
+        headerName: data.headerName,
         parameters: data.parameters,
         valHourly: data.valHourly,
         valSalary: data.valSalary,
@@ -92,13 +125,13 @@ import NewElement from "./newElement"
 
       await elementCallback(newList)
 
-      let two: any = [];
-      let three: any = []
-      allElements.forEach((el: any) => {
-        let str = el.elRow;
+      let two: Element[] = [];
+      let three: Element[] = []
+      newList.forEach((el: Element) => {
+        let str: string = el.elRow;
         let newStr = str[el.elRow.length - 1]
 
-        if(newStr === '2' || newStr === 2) {
+        if(newStr === '2') {
           two.push(el)
         }
         else {
@@ -117,11 +150,11 @@ import NewElement from "./newElement"
             <div className="flex">
               <div>
                 <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3" onClick={() => setNewHeaderOpen(true)}><span className="bg-orange-400 ml-5 text-white hover:bg-gray-300 px-3 py-2 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer">New Header</span></div>
-                {newHeaderOpen && <NewHeader isOpen={() => setNewHeaderOpen(false)} callBack={(data: any) => addNewHeader(data)}/>}
+                {newHeaderOpen && <NewHeader isOpen={() => setNewHeaderOpen(false)} callBack={(data: Header) => addNewHeader(data)}/>}
               </div>
               <div>
                 <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3" onClick={() => setNewElementOpen(true)}><span className="bg-orange-400 ml-5 text-white hover:bg-gray-300 px-3 py-2 rounded-md transition-all duration-200 ease-in-out hover:cursor-pointer">New Element</span></div>
-                {newElementOpen && <NewElement isOpen={() => setNewElementOpen(false)} callBack={(data: any) => addNewElement(data)} allHeaders={headers} id={id}/>}
+                {newElementOpen && <NewElement isOpen={() => setNewElementOpen(false)} callBack={(data: El) => addNewElement(data)} allHeaders={headers} id={id}/>}
               </div>
             </div>
             
@@ -142,14 +175,14 @@ import NewElement from "./newElement"
                 </thead>
                 <tbody className="bg-white">
                 <tr className="even:bg-gray-50">
-                  {headers.map((header: any, index: number) => (
+                  {headers.map((header: Header, index: number) => (
                       <td key={header.example + index}  className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
                         {header.example}
                       </td>
                   ))}
                   </tr>
                   <tr className="even:bg-gray-50" >
-                    {row2.map((element: any, index: number) => (
+                    {row2.map((element: Element, index: number) => (
                     
                       <td key={element.id + index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
                         {element.elType}
@@ -158,7 +191,7 @@ import NewElement from "./newElement"
                     ))}
                   </tr>
                   <tr className="even:bg-gray-50" >
-                    {row3.map((element: any, index: number) => (
+                    {row3.map((element: Element, index: number) => (
                     
                       <td key={element.id + index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
                         {element.elType}

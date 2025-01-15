@@ -1,7 +1,7 @@
 
 type Props = {
     label: string;
-    callBack: Function;
+    callBack: (data: string) => void;
     value?: string | number;
 }
 
