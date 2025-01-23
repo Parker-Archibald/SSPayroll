@@ -75,7 +75,7 @@ import NewElement from "./newElement"
       
       const headerLen = headers.length
       const elLen = allElements.length
-      let finalId = parseInt(`${id}${headerLen + elLen}`)
+      const finalId = parseInt(`${id}${headerLen + elLen}`)
       // const finalLen = headerLen + elLen
 
       const tempData: ReturnHeader = {
