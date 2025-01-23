@@ -75,14 +75,9 @@ import NewElement from "./newElement"
       let finalId;
       const headerLen = headers.length
       const elLen = allElements.length
-      const finalLen = headerLen + elLen + 1
+      // const finalLen = headerLen + elLen
 
-      if(headers.length < 10) {
-        finalId = parseInt(`${id}0${finalLen}`)
-      }
-      else {
-        finalId = parseInt(`${id}${finalLen}`)
-      }
+      finalId = parseInt(`${id}${headerLen + elLen}`)
 
       const tempData: ReturnHeader = {
         id: finalId,
