@@ -72,12 +72,11 @@ import NewElement from "./newElement"
       example: string;
     }) => {
       const newHeaders: ReturnHeader[] = headers;
-      let finalId;
+      
       const headerLen = headers.length
       const elLen = allElements.length
+      let finalId = parseInt(`${id}${headerLen + elLen}`)
       // const finalLen = headerLen + elLen
-
-      finalId = parseInt(`${id}${headerLen + elLen}`)
 
       const tempData: ReturnHeader = {
         id: finalId,
