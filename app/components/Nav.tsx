@@ -11,7 +11,10 @@ const Nav = () => {
     useEffect(() => {
             const path = pathName.split('/')[1]
             if(path === 'payrollExport') {
-                setRoute('Payroll Export') 
+                setRoute('Payroll Export')
+            }
+            else if(path === 'standardExport') {
+                setRoute('Standard Export')
             }
             else {
                 setRoute(undefined)
@@ -20,9 +23,12 @@ const Nav = () => {
 
     return (
         <div className=" top-0 left-0 pt-10">
-            <div className="bg-orange-500 py-2 text-gray-100 px-8">
+            <div className="bg-orange-500 py-2 text-gray-100 px-8 flex gap-2">
                 <div className="hover:bg-gray-100 hover:text-orange-500 w-fit px-2 py-1 rounded-sm hover:cursor-pointer text-sm transition-all duration-100 ease-in-out" onClick={() => router.push('/payrollExport')}>
                     <p>Payroll Export</p>
+                </div>
+                <div className="hover:bg-gray-100 hover:text-orange-500 w-fit px-2 py-1 rounded-sm hover:cursor-pointer text-sm transition-all duration-100 ease-in-out" onClick={() => router.push('/standardExport')}>
+                    <p>Standard Export</p>
                 </div>
             </div>
 
