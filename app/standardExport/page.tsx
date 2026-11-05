@@ -94,6 +94,7 @@ const StandardExport = () => {
     const [sftpPassword, setSftpPassword] = useState<string>('')
     const [sftpTargetDirectory, setSftpTargetDirectory] = useState<string>('')
     const [franchiseId, setFranchiseId] = useState<string>('')
+    const [franchiseName, setFranchiseName] = useState<string>('')
     const [taskHour, setTaskHour] = useState<string>('')
     const [taskMinute, setTaskMinute] = useState<string>('')
     const [timezone, setTimezone] = useState<string>('')
@@ -110,10 +111,14 @@ const StandardExport = () => {
 
     const fullCorporateId = corporateId.padEnd(15, '0')
     // "TSC - Serve - Standard - Static" -> "TSC_Serve_Standard_Static"
-    const codeName = name.replace(/-/g, ' ').trim().split(/\s+/).join('_')
+    // const codeName = name.replace(/-/g, ' ').trim().split(/\s+/).join('_')
+    let codeName = '';
+    if (franchiseId) {
+        codeName = "_" + franchiseName
+    }
     const scriptParameters = `-f true -c ${fullCorporateId} -fe ${sftpUrl} -fu ${sftpUsername} -fp ${sftpPassword} -fd /${sftpTargetDirectory}` + (franchiseId ? ` -fId ${franchiseId}` : '') + ' --daily-summaries true'
 
-    const code = `${type}_${codeName}`
+    const code = `${type}${codeName}`
     // 24 hour time, e.g. "14:30", empty until both hour and minute are entered
     const taskTime = taskHour && taskMinute ? `${taskHour.padStart(2, '0')}:${taskMinute.padStart(2, '0')}` : ''
 
@@ -275,6 +280,20 @@ const StandardExport = () => {
                         className="p-2 focus:outline-none rounded-md focus:ring-1 focus:ring-blue-400"
                         value={franchiseId}
                         onChange={(e) => setFranchiseId(e.target.value)}
+                    />
+                </div>
+                {/* Franchise Name */}
+                <div className="flex flex-col gap-y-2 w-1/4 max-w-72 text-gray-800">
+                    <div className="flex items-center gap-x-1">
+                        <label htmlFor='franchiseNameInput' className="text-sm">Franchise Name</label>
+                        <InfoTooltip text="If this export is for the whole corporate, leave the Franchise Name blank."/>
+                    </div>
+                    <input
+                        id='franchiseNameInput'
+                        autoComplete="off"
+                        className="p-2 focus:outline-none rounded-md focus:ring-1 focus:ring-blue-400"
+                        value={franchiseName}
+                        onChange={(e) => setFranchiseName(e.target.value)}
                     />
                 </div>
                 {/* Task Time */}
