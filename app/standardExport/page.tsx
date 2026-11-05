@@ -116,7 +116,7 @@ const StandardExport = () => {
     if (franchiseId) {
         codeName = "_" + franchiseName
     }
-    const scriptParameters = `-f true -c ${fullCorporateId} -fe ${sftpUrl} -fu ${sftpUsername} -fp ${sftpPassword} -fd /${sftpTargetDirectory}` + (franchiseId ? ` -fId ${franchiseId}` : '') + ' --daily-summaries true'
+    const scriptParameters = `-f true -c ${fullCorporateId} -fe ${sftpUrl} -fu ${sftpUsername} -fp ${sftpPassword} -fd /${sftpTargetDirectory}` + (franchiseId ? ` -fId ${franchiseId}` : '') + (type === 'STANDARD_TRANSACTIONAL' ? ' --daily-summaries true' : '')
 
     const code = `${type}${codeName}`
     // 24 hour time, e.g. "14:30", empty until both hour and minute are entered
@@ -161,13 +161,13 @@ const StandardExport = () => {
                 ['last_process_time', '1793878146986'],
                 ['secondary_server_process_delay', 'NULL'],
                 ['last_update_server_id', '1793630679527949095'],
-                ['status', 'FINISHED'],
+                ['status', sqlString('FINISHED')],
                 ['last_run_message', 'NULL'],
                 ['last_run_duration', '178571'],
-                ['last_run_start_time', '2026-11-05 11:26:08'],
+                ['last_run_start_time', sqlString('2026-11-05 11:26:08')],
                 ['run_every', 'NULL'],
-                ['last_scheduled_run_date', '2026-11-05'],
-                ['last_queued_time', '2026-11-05 11:15:04'],
+                ['last_scheduled_run_date', sqlString('2026-11-05')],
+                ['last_queued_time', sqlString('2026-11-05 11:15:04')],
                 ['SQS_Name', sqlString('production-PENTAHO-scheduledTasks.fifo')],
             ],
         },
