@@ -70,10 +70,10 @@ const columnList = (query: Query) => `(${query.columns.map(([col]) => col).join(
 const valueList = (query: Query) => `(${query.columns.map(([, val]) => val).join(', ')})`
 
 // Today's date as yyyymmdd001
-const todaysId = () => {
-    const d = new Date()
-    return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}001`
-}
+// const todaysId = () => {
+//     const d = new Date()
+//     return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}001`
+// }
 
 const InfoTooltip = ({text}: {text: string}) => (
     <div className="relative group">
@@ -105,13 +105,13 @@ const StandardExport = () => {
 
     // Set on the client only so the server and browser render the same HTML
     useEffect(() => {
-        setId(todaysId())
+        setId('FLOOR(UNIX_TIMESTAMP(NOW(3)) * 1000)')
     }, [])
 
     const fullCorporateId = corporateId.padEnd(15, '0')
     // "TSC - Serve - Standard - Static" -> "TSC_Serve_Standard_Static"
     const codeName = name.replace(/-/g, ' ').trim().split(/\s+/).join('_')
-    const scriptParameters = `-f true -c ${fullCorporateId} -fe ${sftpUrl} -fu ${sftpUsername} -fp ${sftpPassword} -fd ${sftpTargetDirectory}` + (franchiseId ? ` -fId ${franchiseId}` : '')
+    const scriptParameters = `-f true -c ${fullCorporateId} -fe ${sftpUrl} -fu ${sftpUsername} -fp ${sftpPassword} -fd /${sftpTargetDirectory}` + (franchiseId ? ` -fId ${franchiseId}` : '') + ' --daily-summaries true'
 
     const code = `${type}_${codeName}`
     // 24 hour time, e.g. "14:30", empty until both hour and minute are entered
@@ -153,16 +153,16 @@ const StandardExport = () => {
                 ['timezone', timezone ? sqlString(timezone) : 'NULL'],
                 ['is_absolute_time', '1'],
                 ['run_synchronously', '1'],
-                ['last_process_time', 'NULL'],
+                ['last_process_time', '1793878146986'],
                 ['secondary_server_process_delay', 'NULL'],
-                ['last_update_server_id', 'NULL'],
-                ['status', 'NULL'],
+                ['last_update_server_id', '1793630679527949095'],
+                ['status', 'FINISHED'],
                 ['last_run_message', 'NULL'],
-                ['last_run_duration', 'NULL'],
-                ['last_run_start_time', 'NULL'],
+                ['last_run_duration', '178571'],
+                ['last_run_start_time', '2026-11-05 11:26:08'],
                 ['run_every', 'NULL'],
-                ['last_scheduled_run_date', 'NULL'],
-                ['last_queued_time', 'NULL'],
+                ['last_scheduled_run_date', '2026-11-05'],
+                ['last_queued_time', '2026-11-05 11:15:04'],
                 ['SQS_Name', sqlString('production-PENTAHO-scheduledTasks.fifo')],
             ],
         },
